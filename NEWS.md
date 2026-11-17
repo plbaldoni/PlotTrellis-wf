@@ -1,3 +1,9 @@
+# PlotTrellis-wf 1.0.1
+
+- Works with Nextflow 25.04 or later (1.0.0 needed 25.10). Any Nextflow from 25.04 on can be
+  used; the Quick start no longer asks for a particular version. Nextflow's newer syntax parser
+  (`NXF_SYNTAX_PARSER=v2`) still needs 25.10 or later.
+
 # PlotTrellis-wf 1.0.0
 
 First release. PlotTrellis-wf turns raw sequencing data (FASTQ files) into the files read by the

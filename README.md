@@ -20,8 +20,7 @@ A Nextflow pipeline that turns raw sequencing data (FASTQ files) into the files 
 **2. Run**, from a terminal on your cluster's login node (SLURM):
 
 ```bash
-module load apptainer nextflow       # module names vary between clusters; see "Requirements"
-export NXF_VER=25.10.0               # the Nextflow version the pipeline was tested with
+module load apptainer nextflow       # Nextflow 25.04 or later; module names vary between clusters, see "Requirements"
 cd /path/to/my_experiment            # the folder with samples.xlsx; always start the run from here
 sbatch -p long -t 14-00:00:00 -c 2 --mem 8G -J plottrellis -o nextflow_%j.log --wrap \
   "nextflow run plbaldoni/PlotTrellis-wf -resume --samplesheet samples.xlsx --outdir results --species mouse"
@@ -41,7 +40,7 @@ Before submitting anything, the pipeline checks the samplesheet and lists every 
 
 Instead of `sbatch`, the `nextflow run ...` command can also be run on the login node inside `screen` or `tmux`, if your cluster allows long-running programs there; the run stops if that session is closed.
 
-**Pipeline version.** Nextflow downloads the pipeline from GitHub on your first run and keeps using that copy for all your later runs; it does not update it by itself. To update to the newest version, run `nextflow pull plbaldoni/PlotTrellis-wf` once (later runs then use the new version), or add `-latest` to one `nextflow run` command. To use a given version, add `-r` and its release tag, e.g. `-r v1.0.0` (the versions are listed under *Releases* on the GitHub page). The version used is shown at the start of the Nextflow log.
+**Pipeline version.** Nextflow downloads the pipeline from GitHub on your first run and keeps using that copy for all your later runs; it does not update it by itself. To update to the newest version, run `nextflow pull plbaldoni/PlotTrellis-wf` once (later runs then use the new version), or add `-latest` to one `nextflow run` command. To use a given version, add `-r` and its release tag, e.g. `-r v1.0.1` (the versions are listed under *Releases* on the GitHub page). The version used is shown at the start of the Nextflow log.
 
 ---
 
@@ -142,7 +141,7 @@ Scratch folders are often cleaned automatically. To keep references for longer, 
 
 The pipeline needs:
 
-- **Nextflow 25.10 or later** (with Java 17 or later). Most clusters have a `nextflow` module (`module avail nextflow`). Otherwise, install it once without admin rights with `curl -s https://get.nextflow.io | bash`, which creates a `nextflow` file to move into a folder on your `PATH` (e.g. `~/bin`). `export NXF_VER=25.10.0` makes any Nextflow installation run version 25.10.0, the version the pipeline was tested with.
+- **Nextflow 25.04 or later** (with Java 17 or later). Most clusters have a `nextflow` module (`module avail nextflow`); if the default one is older, load a newer one by its version, e.g. `module load nextflow/25.10.0`. Otherwise, install it once without admin rights with `curl -s https://get.nextflow.io | bash`, which creates a `nextflow` file to move into a folder on your `PATH` (e.g. `~/bin`). With an older Nextflow, the pipeline stops at once with a message giving the version it needs; `export NXF_VER=25.10.0` (or another version) makes any Nextflow installation run that version instead. Nextflow's newer syntax parser (`NXF_SYNTAX_PARSER=v2`) needs Nextflow 25.10 or later; the default parser works with every version from 25.04.
 - **Apptainer** (or Singularity, with `-profile singularity`), to run the containers. On clusters with environment modules, load it before Nextflow (`module load apptainer nextflow`), because some Nextflow modules load their own Apptainer otherwise.
 - **A job scheduler**: SLURM by default; PBS, LSF and SGE through profiles (see *Other schedulers*).
 - Internet access on the compute nodes, to download the containers, the GENCODE files and data from GEO.

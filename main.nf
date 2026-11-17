@@ -63,12 +63,9 @@ workflow {
   sheet.warnings.each { w -> log.warn(w) }
   if ( sheet.errors ) error("Problems found in the samplesheet ${params.samplesheet}:\n  - " + sheet.errors.join("\n  - "))
 
-  def release
-  try {
-    release = GenomeRefs.resolveRelease(params.species, params.gencode)
-  } catch ( IllegalArgumentException e ) {
-    error(e.message)
-  }
+  def resolved = GenomeRefs.resolveReleaseOrError(params.species, params.gencode)
+  if ( resolved.error ) error(resolved.error)
+  def release = resolved.release
   def urls = GenomeRefs.urls(params.species, release)
   if ( !GenomeRefs.exists(urls.genome) ) error("GENCODE release '${release}' was not found for ${params.species} (${urls.genome}). Check --gencode.")
 

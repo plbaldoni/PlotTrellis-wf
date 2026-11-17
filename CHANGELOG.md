@@ -4,6 +4,22 @@ All notable changes to PlotTrellis-wf are listed here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and versions follow
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html). A summary for users is in `NEWS.md`.
 
+## [1.0.1] - 2026-11-17
+
+### Changed
+
+- The minimum Nextflow version is now 25.04.0 (was 25.10.0). The pipeline was stub-tested with
+  Nextflow 25.04.2 (default syntax parser), 25.10.0 and 26.04.3 (both parsers); the newer syntax
+  parser (`NXF_SYNTAX_PARSER=v2`) needs 25.10 or later.
+- An older Nextflow now stops at once with "Nextflow version ... does not match workflow
+  required version: >=25.04.0" (`manifest.nextflowVersion = '!>=25.04.0'`). Before, Nextflow
+  24.10 and older stopped with a script compilation error in `main.nf` instead, caused by the
+  `try`/`catch` around the `--gencode` check; that check now uses
+  `GenomeRefs.resolveReleaseOrError()` and gives the same messages.
+- The README's Quick start no longer sets `NXF_VER`, so any installed Nextflow from 25.04 on is
+  used. *Requirements* explains how to load a newer module or set `NXF_VER` when the default
+  Nextflow is older.
+
 ## [1.0.0] - 2026-11-17
 
 First release.
@@ -55,11 +71,12 @@ First release.
 - **Logs**: the Nextflow log, report, timeline, trace, validated samplesheet and references used
   in `<outdir>/logs/`, plus every task's log in `<outdir>/logs/tasks/`.
 - Runs under both Nextflow syntax parsers (v1 and `NXF_SYNTAX_PARSER=v2`); Nextflow 25.10.0 or
-  later.
+  later (lowered to 25.04.0 in 1.0.1).
 
 ### Tool versions
 
 minimap2 2.31, samtools 1.23.1, Salmon 2.8.0, deepTools 3.5.6, MACS3 3.0.5, fastp 1.4.0,
 FastQC 0.12.1, MultiQC 1.35, bwa 0.7.19, pairtools 1.1.3, Juicer Tools 2.20.00, sra-tools 3.0.8.
 
+[1.0.1]: https://github.com/plbaldoni/PlotTrellis-wf/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/plbaldoni/PlotTrellis-wf/releases/tag/v1.0.0

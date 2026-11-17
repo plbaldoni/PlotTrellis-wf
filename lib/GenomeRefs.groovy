@@ -43,6 +43,17 @@ class GenomeRefs {
         return "M${req}".toString()
     }
 
+    // resolveRelease() for main.nf: [release: ..., error: null], or [release: null, error: message].
+    // main.nf can't catch the exception itself: a try/catch in the workflow body stops Nextflow
+    // before 25.04 from compiling main.nf, and then from reporting the Nextflow version it needs
+    static Map resolveReleaseOrError(String species, Object requested) {
+        try {
+            return [release: resolveRelease(species, requested), error: null]
+        } catch (IllegalArgumentException e) {
+            return [release: null, error: e.message]
+        }
+    }
+
     static String latestRelease(String species) {
         String html
         try {
